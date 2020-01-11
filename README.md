@@ -1,23 +1,25 @@
 # avrodoc-plus
 
-avrodoc-plus is a documentation tool for [Apache Avro](http://avro.apache.org/) schemas.  
-This project originates from [https://github.com/ept/avrodoc](https://github.com/ept/avrodoc) and [https://github.com/ckatzorke/avrodoc-plus](https://github.com/ckatzorke/avrodoc.plus), which are great, but received no further updates.
+avrodoc-plus is a documentation tool for [Apache Avro](http://avro.apache.org/) schemas.
+This project originates from [https://github.com/ept/avrodoc](https://github.com/ept/avrodoc) and [https://github.com/mobimeo/avrodoc-plus](https://github.com/ckatzorke/avrodoc.plus), which are great, but received no further updates.
 
 ## Usage
 
 ```bash
-npm install --global @mobimeo/avrodoc-plus | yarn add global @mobimeo/avrodoc-plus
+npm install --global castle/avrodoc-plus | yarn add global castle/avrodoc-plus
 avrodoc-plus -i source -o out.html
 ```
 
 ### Options
 
-* -i *sourcefolder*  
+* -i *sourcefolder*
    Pass in a source folder that will recursively parsed and crawled for avsc files
-* -o *outputfile*  
+* -o *outputfile*
   The file where the generated doc should be written to
-* -s *external stylesheet less file*  
+* -s *external stylesheet less file*
   Your own less file, used to override specific style of your generated page
+* -d *sub schema directory*
+  Schema containing sub schemas referenced
 
 ### Enhancements
 
