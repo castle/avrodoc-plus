@@ -7,15 +7,22 @@ const fs = require('fs');
 const path = require('path');
 const debug = require('debug')('avrodoc:avrodoc');
 /**
- * 
+ *
  * @param {Array<string>} inputfiles an array with resolved filenames to be read and parsed and eventually added to the avrodoc
  * @param {string} outputfile the html file that should be written
  */
-function createAvroDoc(extra_less_files, inputfiles, outputfile){
+function createAvroDoc(extra_less_files, inputfiles, outputfile, subSchemaFiles){
+    let subSchemaRepo = {}
+
+    subSchemaFiles.map(function(file) {
+        let json = readJSON(file);
+        subSchemaRepo[json.namespace + '.' + json.name] = json;
+    });
+
     debug(`Creating ${outputfile} from `, inputfiles);
     let schemata = inputfiles.map(function (filename) {
         return {
-            json: readJSON(filename),
+            json: readNestedJSON(filename, subSchemaRepo),
             filename: filename
         };
     });
@@ -30,6 +37,53 @@ function createAvroDoc(extra_less_files, inputfiles, outputfile){
     });
 }
 
+// I hate Javascript
+function isObject (value) {
+    return value && typeof value === 'object' && value.constructor === Object;
+}
+
+const avroTypes = ['string', 'boolean', 'bytes', 'long', 'null', 'int', 'float', 'double'];
+function resolveSubSchema(type, repo) {
+    if (repo[type]) {
+        replaceSubSchema(repo[type], repo);
+        return repo[type];
+    } else if (isObject(type)) {
+        if(type.items) {
+            type.items = resolveSubSchema(type.items, repo);
+        }
+        return type;
+    }
+    return type;
+}
+
+function replaceType(type, repo) {
+    if (Array.isArray(type)) {
+        return type.map(function(type) {
+            return resolveSubSchema(type, repo);
+        });
+    } else {
+        return resolveSubSchema(type, repo);
+    }
+}
+
+function replaceSubSchema(json, repo) {
+    if (!json.fields) {
+        return;
+    }
+    json.fields.map((field, idx) => {
+        json.fields[idx].type = replaceType(field.type, repo);
+
+        return json.fields[idx];
+    });
+}
+
+function readNestedJSON(filename, repo) {
+    let json = readJSON(filename);
+
+    replaceSubSchema(json, repo);
+
+    return json;
+}
 
 // private stuf
 
