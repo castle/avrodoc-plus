@@ -28,9 +28,17 @@
     {#namespaces}
         <li data-namespace="{namespace}" data-schemas="{#types}{name}{@sep},{/sep}{/types}">
             <p class="namespace">{namespace}</p>
+            {?primary_types}
+                {#primary_types}
+                    <ul class='schema primary' data-schema="{name}">
+                        {>schema_list_item:./}
+                    </ul>
+                {/primary_types}
+            {/primary_types}
             {?types}
+                <hr>
                 {#types}
-                    <ul class="schema" data-schema="{name}">
+                    <ul class='schema' data-schema="{name}">
                         {>schema_list_item:./}
                     </ul>
                 {/types}

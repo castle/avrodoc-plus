@@ -114,7 +114,8 @@ function AvroDoc(input_schemata) {
         return _(_(namespaces).sortBy('namespace')).map(function (ns_types) {
             return {
                 namespace: ns_types.namespace || 'No namespace',
-                types: _(ns_types.types).sortBy('name')
+                primary_types: _(_(ns_types.types).filter(function(t) { return t.is_primary })).sortBy('name'),
+                types: _(_(ns_types.types).filter(function(t) { return !t.is_primary })).sortBy('name')
             };
         });
     }
@@ -173,7 +174,7 @@ function AvroDoc(input_schemata) {
             while (schema_by_name[filename + i]) i++;
             filename = filename + i;
         }
-
+        json.is_primary = true;
         schema_by_name[filename] = AvroDoc.Schema(_public, shared_types, json, filename);
     }
 
