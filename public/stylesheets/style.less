@@ -24,6 +24,8 @@
 
 @import "footer.less";
 
+@list-pane-with: 300px;
+@list-pane-margin: 30px;
 
 .vertical-scrolling() {
   overflow-x: hidden;
@@ -38,10 +40,9 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 230px;
+  width: @list-pane-with;
   .vertical-scrolling();
   border-right: 1px solid #ddd;
-  .box-shadow(0 0 20px #ddd);
 
   h2 {
     font-size: @baseFontSize + 2px;
@@ -68,7 +69,6 @@
     // General link styling
     a {
       display: block;
-      font-weight: lighter;
       padding: 4px 0;
       text-decoration: none;
       .text-overflow();
@@ -131,7 +131,7 @@
 }
 
 #content-pane {
-  padding: 11px 25px 50px 260px;
+  padding: 11px 25px 50px (@list-pane-with + @list-pane-margin);
 
   h2.namespace {
     font-size: @baseFontSize;

@@ -42,7 +42,6 @@ function isObject (value) {
     return value && typeof value === 'object' && value.constructor === Object;
 }
 
-const avroTypes = ['string', 'boolean', 'bytes', 'long', 'null', 'int', 'float', 'double'];
 function resolveSubSchema(type, repo) {
     if (repo[type]) {
         replaceSubSchema(repo[type], repo);
